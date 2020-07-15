@@ -7,7 +7,7 @@ import './Home.scss';
 
 import { dialogsActions } from 'redux/actions';
 
-const Home = props => {
+const ChatPage = props => {
   const { setCurrentDialogId, user } = props;
   useEffect(() => {
     const { pathname } = props.location;
@@ -16,7 +16,7 @@ const Home = props => {
   }, [props.location.pathname]);
 
   return (
-    <section className="home">
+    <section className="chatpage">
       <div className="chat">
         <Sidebar />
         {user && (
@@ -37,5 +37,5 @@ export default withRouter(
   connect(
     ({ user }) => ({ user: user.data }),
     dialogsActions,
-  )(Home),
+  )(ChatPage),
 );

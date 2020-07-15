@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route, Redirect, Switch } from "react-router-dom";
 
-import { Auth, Home } from "pages";
+import { Auth, Profile, Main, Categories, Advanced, ChatPage, Transactions, Settings } from "pages";
 
 const App = props => {
   const { isAuth } = props;
@@ -15,8 +15,32 @@ const App = props => {
           component={Auth}
         />
         <Route
+          path="/main"
+          component={Main}
+        />
+        <Route
+          path="/categories"
+          component={Categories}
+        />
+        <Route
+          path="/advanced"
+          component={Advanced}
+        />
+        <Route
+          path="/profile"
+          render={() => (isAuth ? <Profile /> : <Redirect to="/main" />)}
+        />
+        <Route
+          path="/transactions"
+          render={() => (isAuth ? <Transactions /> : <Redirect to="/main" />)}
+        />
+        <Route
+          path="/settings"
+          render={() => (isAuth ? <Settings /> : <Redirect to="/main" />)}
+        />
+        <Route
           path="/"
-          render={() => (isAuth ? <Home /> : <Redirect to="/signin" />)}
+          render={() => (isAuth ? <ChatPage /> : <Redirect to="/main" />)}
         />
       </Switch>
     </div>
