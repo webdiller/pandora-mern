@@ -63,7 +63,7 @@
         display: flex
         align-items: center
         max-width: 1140px
-        margin: 0 auto 50px auto
+        margin: 0 auto
         padding: 0 15px
         min-height: $headerHeight
     &__navigation
@@ -221,5 +221,10 @@
         box-sizing: content-box
 
 
-@media only screen and (max-width: 480px) 
-    // 
+@media only screen and (max-width: 480px)
+    .header__title
+        display: none
+        
+@media only screen and (max-width: 340px)
+        .header__omnibox
+        max-width: 250px 

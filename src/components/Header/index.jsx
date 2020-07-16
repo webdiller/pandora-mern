@@ -38,6 +38,19 @@ function Header() {
         );
     };
 
+    const LinkToPersonal = () => {
+        let auth = 1;
+        return (
+            auth ?
+                <Link to="/profile" className="header__bar-icon">
+                    <i className="header__bar-icon-inner far fa-user"></i>
+                </Link>
+                : <div className="header__bar-icon">
+                    <i className="header__bar-icon-inner far fa-user"></i>
+                </div>
+        )
+    };
+
     return (
         <header className="header">
             
@@ -47,6 +60,10 @@ function Header() {
             <div className="header__container">
                 <Logo />
                 <Omnibox />
+
+                <div className="header__bar">
+                    <LinkToPersonal />
+                </div>
             </div>
 
         </header >

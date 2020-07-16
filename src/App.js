@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route, Redirect, Switch } from "react-router-dom";
 
-import { Auth, Profile, Main, Categories, Advanced, ChatPage, Transactions, Settings } from "pages";
+import { Auth, Profile, Main, Categories, Advanced, ChatPage, Transactions, Settings, Favorites } from "pages";
 import { Header, Footer} from "./components";
 
 const App = props => {
@@ -35,6 +35,10 @@ const App = props => {
         <Route
           path="/transactions"
           render={() => (isAuth ? <Transactions /> : <Redirect to="/main" />)}
+        />
+        <Route
+          path="/favorites"
+          render={() => (isAuth ? <Favorites /> : <Redirect to="/main" />)}
         />
         <Route
           path="/settings"
