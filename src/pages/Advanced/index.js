@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './Advanced.sass';
 
 const Advanced = props => {
   return (

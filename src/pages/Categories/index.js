@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './Categories.sass';
 
 const Categories = props => {
   return (

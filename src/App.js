@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { Route, Redirect, Switch } from "react-router-dom";
 
 import { Auth, Profile, Main, Categories, Advanced, ChatPage, Transactions, Settings } from "pages";
-import { Footer } from "./components";
+import { Header, Footer } from "./components";
 
 const App = props => {
   const { isAuth } = props;
   return (
     <div className="wrapper">
+      <Header/>
       <Switch>
         <Route
           exact
