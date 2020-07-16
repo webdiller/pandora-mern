@@ -12,5 +12,7 @@ export { default as Status } from "./Status";
 export { default as ChatInput } from "./ChatInput";
 export { default as FormField } from "./FormField";
 export { default as UploadFiles } from "./UploadFiles";
+export { default as Omnibox } from "./Omnibox";
+export { default as LiveSearch } from "./LiveSearch";
 export { default as Header } from "./Header";
 export { default as Footer } from "./Footer";

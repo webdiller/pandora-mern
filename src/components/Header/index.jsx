@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Omnibox from '../Omnibox';
 
 import './Header.sass';
 
@@ -45,6 +46,7 @@ function Header() {
 
             <div className="header__container">
                 <Logo />
+                <Omnibox />
             </div>
 
         </header >
