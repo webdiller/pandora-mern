@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { Messages, ChatInput, Status, Sidebar } from 'containers';
 import { connect } from 'react-redux';
 
-import './Home.scss';
+import './ChatPage.scss';
 
 import { dialogsActions } from 'redux/actions';
 
