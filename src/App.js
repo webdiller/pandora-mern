@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Route, Redirect, Switch } from "react-router-dom";
 
 import { Auth, Profile, Main, Categories, Advanced, ChatPage, Transactions, Settings } from "pages";
+import { Footer } from "./components";
 
 const App = props => {
   const { isAuth } = props;
@@ -43,6 +44,7 @@ const App = props => {
           render={() => (isAuth ? <ChatPage /> : <Redirect to="/main" />)}
         />
       </Switch>
+      <Footer/>
     </div>
   );
 };
