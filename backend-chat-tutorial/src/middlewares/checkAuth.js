@@ -1,12 +1,6 @@
-import express from "express";
-import { verifyJWTToken } from "../utils";
-import { DecodedData } from "../utils/verifyJWTToken";
+const { verifyJWTToken } = require("../utils/verifyJWTToken");
 
-export default (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-): void => {
+exports.checkAuth = (req, res, next) => {
   if (
     req.path === "/user/signin" ||
     req.path === "/user/signup" ||
@@ -15,15 +9,15 @@ export default (
     return next();
   }
 
-  const token: string | null =
-    "token" in req.headers ? (req.headers.token as string) : null;
+  const token = "token" in req.headers ? req.headers.token : null;
 
   if (token) {
     verifyJWTToken(token)
-      .then((user: DecodedData | null) => {
+      .then((user) => {
         if (user) {
           req.user = user.data._doc;
         }
+
         next();
       })
       .catch(() => {
