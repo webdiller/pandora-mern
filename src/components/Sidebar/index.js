@@ -30,7 +30,7 @@ const Sidebar = ({
       <div className="chat__sidebar-header">
         <div>
           <Icon type="team" />
-          <span>Список диалогов</span>
+          <span>Все чаты</span>
         </div>
         <Button onClick={onShow} type="link" shape="circle" icon="form" />
       </div>

@@ -10,11 +10,11 @@
 .chat {
   display: flex;
   height: 100%;
+  max-height: 70vh;
   background-color: #fff;
-  width: 1140px;
-  margin: 0 auto;
-  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.04204);
-
+  max-width: 1140px;
+  margin: 40px auto 0 auto;
+  padding: 0 20px;
   &__sidebar {
     width: 320px;
     border-right: 1px solid #f7f7f7;
