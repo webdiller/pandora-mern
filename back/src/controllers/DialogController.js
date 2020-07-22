@@ -81,7 +81,7 @@ class DialogController {
               })
               .catch((err) => {
                 res.json({
-                  message: "error",
+                  status: "error",
                   message: err,
                 });
               });

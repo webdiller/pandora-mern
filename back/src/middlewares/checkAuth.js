@@ -7,6 +7,7 @@ exports.checkAuth = (req, res, next) => {
   if (
     req.path === "/user/signin" ||
     req.path === "/user/signup" ||
+    req.path === "/categories" ||
     req.path === "/user/verify"
   ) {
     return next();

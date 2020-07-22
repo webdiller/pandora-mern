@@ -1,146 +1,190 @@
-import React, { Component } from 'react';
-import { Aside, TopNavigation } from '../../components';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Aside } from '../../components';
+import Select from 'react-dropdown-select';
 import './Profile.sass';
 
-export default class Profile extends Component {
+export default function Profile() {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeModal: false,
-      activePersonalArea: true,
-      activeOrders: false,
-      confirmOrder: false,
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    category: '',
+  });
+
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const result = await axios.get('http://localhost:3003/categories');
+
+        let data = [];
+
+        result.data.map(item => {
+          data.push({
+            value: item.name,
+            label: item.name,
+          })
+        });
+
+        setCategories(data);
+
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }
 
-  // Навигация по сделкам
-  authorShowCustomerOrders = (e) => {
+    getCategories();
+  }, [])
+
+  const onChange = e => {
     e.preventDefault();
-    this.setState({ activePersonalArea: false });
-    this.setState({ activeOrders: true });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
   }
 
-  // Активные сделки
-  authorShowExecuterOrders() {
-    console.log(this);
-  }
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
 
-  // Подтверждение выполненной сделки
-  authorFinishOrder = (e) => {
-    e.preventDefault();
-    this.setState({ activeOrders: false });
-    this.setState({ confirmOrder: true });
-  }
+  //   try {
+  //     const url = 'http://localhost:3003/service';
 
-  // Вызов модального окна, подтверждающего сделку
-  confirmOrderModal = (e) => {
-    e.preventDefault();
-    this.setState({ activeModal: !this.state.activeModal });
-  }
+  //     const newService = {
+  //       title: formData.title,
+  //       body: formData.description,
+  //       categories: formData.category
+  //     }
 
-  // Закрытие модального окна, подтверждающего сделку
-  confirmOrderModalClose = (e) => {
-    e.preventDefault();
-    this.setState({ activeModal: false })
-  }
+  //     const body = JSON.stringify(newService);
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="profile">
-          <div className="profile__container">
-            <Aside />
-            <div className="profile__content">
-              <TopNavigation />
+  //     const config = {
+  //       headers: {
+  //         'Content-Type': 'Application/json'
+  //       }
+  //     };
 
-              {/* Навигация по сделкам */}
-              <div className={this.state.activePersonalArea ? 'profile__status' : 'profile__status disabled'}>
+  //     const res = await axios.post(url, body, config);
+  //     if (res.status === 200) {
+  //       console.log(res.data);
+  //     }
 
-                <div className="profile__status-item">
-                  <p className="profile__status-title">Личные сообщения:</p>
-                  <div className="profile__status-info">
-                    <div className="profile__status-row">
-                      <span className="profile__status-name">Новых</span>
-                      <span className="profile__status-value">5</span>
-                    </div>
-                    <div className="profile__status-row">
-                      <span className="profile__status-name">Всего</span>
-                      <span className="profile__status-value">41</span>
-                    </div>
-                  </div>
+  //   } catch (error) {
+  //     console.log(error.response.data);
+  //   }
+  // }
+
+  const handleSubmit = () => {
+
+    const newService = {
+      title: formData.title,
+      body: formData.description,
+      categories: formData.category
+    }
+
+    const bodyString = JSON.stringify(newService);
+
+    return axios.post('http://localhost:3003/service/blog', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IiRfXyI6eyJzdHJpY3RNb2RlIjp0cnVlLCJzZWxlY3RlZCI6e30sImdldHRlcnMiOnt9LCJfaWQiOiI1ZjE4MzNlMGQxYzcyYjAwY2MxN2MxMzYiLCJ3YXNQb3B1bGF0ZWQiOmZhbHNlLCJhY3RpdmVQYXRocyI6eyJwYXRocyI6eyJwYXNzd29yZCI6ImluaXQiLCJmdWxsbmFtZSI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJjb25maXJtZWQiOiJpbml0IiwibGFzdF9zZWVuIjoiaW5pdCIsInJvbGUiOiJpbml0IiwiX2lkIjoiaW5pdCIsImNyZWF0ZWRBdCI6ImluaXQiLCJ1cGRhdGVkQXQiOiJpbml0IiwiY29uZmlybV9oYXNoIjoiaW5pdCIsIl9fdiI6ImluaXQifSwic3RhdGVzIjp7Imlnbm9yZSI6e30sImRlZmF1bHQiOnt9LCJpbml0Ijp7Il9pZCI6dHJ1ZSwiY29uZmlybWVkIjp0cnVlLCJsYXN0X3NlZW4iOnRydWUsInJvbGUiOnRydWUsImVtYWlsIjp0cnVlLCJmdWxsbmFtZSI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsImNyZWF0ZWRBdCI6dHJ1ZSwidXBkYXRlZEF0Ijp0cnVlLCJjb25maXJtX2hhc2giOnRydWUsIl9fdiI6dHJ1ZX0sIm1vZGlmeSI6e30sInJlcXVpcmUiOnt9fSwic3RhdGVOYW1lcyI6WyJyZXF1aXJlIiwibW9kaWZ5IiwiaW5pdCIsImRlZmF1bHQiLCJpZ25vcmUiXX0sInBhdGhzVG9TY29wZXMiOnt9LCJjYWNoZWRSZXF1aXJlZCI6e30sIiRzZXRDYWxsZWQiOnt9LCJlbWl0dGVyIjp7Il9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9LCIkb3B0aW9ucyI6eyJza2lwSWQiOnRydWUsImlzTmV3IjpmYWxzZSwid2lsbEluaXQiOnRydWV9fSwiaXNOZXciOmZhbHNlLCIkbG9jYWxzIjp7fSwiJG9wIjpudWxsLCJfZG9jIjp7ImNvbmZpcm1lZCI6dHJ1ZSwibGFzdF9zZWVuIjoiMjAyMC0wNy0yMlQxMTo1MTo1NC45NzVaIiwicm9sZSI6MCwiX2lkIjoiNWYxODMzZTBkMWM3MmIwMGNjMTdjMTM2IiwiZW1haWwiOiJldWdlbmVmcm9tcnVzQGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoicXdlcnR5IiwicGFzc3dvcmQiOiIkMmEkMTAkS0psSDdOQ0JCSDEyNlBTUTdpQU9IT2ZUbnR1UVZhZDM0akhUS25MdW85V0g4SWpWZTNPN0siLCJjcmVhdGVkQXQiOiIyMDIwLTA3LTIyVDEyOjQxOjA0LjA1OFoiLCJ1cGRhdGVkQXQiOiIyMDIwLTA3LTIyVDEyOjQxOjQ3LjI5M1oiLCJjb25maXJtX2hhc2giOiIkMmEkMTAkTHp6QnEzanVZRGNQQUZ0Y2J5ZmlzLjVHWTVkWTRiSWYuUm1ZdUticm13NTBkaE9WZG5rRkMiLCJfX3YiOjB9LCIkaW5pdCI6dHJ1ZX0sImlhdCI6MTU5NTQyMTcxMiwiZXhwIjoxNTk2MDI2NTEyfQ.Y-8u99ypzqeus9TpUH-nkJP_kh6W_U1GZH-NL0N4nP8`
+      },
+      body: bodyString
+    })
+      .then(response => {
+        return response.json();
+      })
+      .catch(err => console.log(err));
+  };
+
+  return (
+    <div className="profile">
+      <div className="profile__container">
+        <Aside />
+        <div className="profile__content">
+
+          {/* Навигация по сделкам */}
+          <div className='profile__status'>
+
+            <div className="profile__status-item">
+              <p className="profile__status-title">Личные сообщения:</p>
+              <div className="profile__status-info">
+                <div className="profile__status-row">
+                  <span className="profile__status-name">Новых</span>
+                  <span className="profile__status-value">5</span>
                 </div>
-
-                <div className="profile__status-item">
-                  <p className="profile__status-title">Сделки ожидающие завершения:</p>
-                  <div className="profile__status-info">
-                    <button onClick={this.authorShowCustomerOrders} className="profile__status-row">
-                      <span className="profile__status-name">Вы исполнитель</span>
-                      <span className="profile__status-value">1</span>
-                    </button>
-                    <button onClick={this.authorShowExecuterOrders} className="profile__status-row">
-                      <span className="profile__status-name">Вы заказчик</span>
-                      <span className="profile__status-value">2</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="profile__status-item">
-                  <p className="profile__status-title">Ваш депозит:</p>
-                  <div className="profile__status-info">
-                    <p className="profile__status-deposit">120000 руб</p>
-                  </div>
-                </div>
-
-                <div className="profile__status-item">
-                  <p className="profile__status-title">Ваш последний вход:</p>
-                  <div className="profile__status-info">
-                    <p className="profile__status-date">17 марта 2021 года</p>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Активные сделки */}
-              <div className={this.state.activeOrders ? 'active-orders profile__active-orders' : 'active-orders profile__active-orders disabled'}>
-                <div className="active-orders__wrapper">
-                  <p className="active-orders__title">Активные сделки</p>
-
-                  <ul className="active-orders__list">
-
-                    {/* {OrdersItems.map((item, index) => {
-                      return <li key={index} className="active-orders__item">
-                        <p className="active-orders__author">Вы</p>
-                        <div className="active-orders__type">
-                          <i className={JSON.parse(item.is_own) ? 'active-orders__type-icon fa fa-arrow-left' : 'active-orders__type-icon fa fa-arrow-right'} aria-hidden="true"></i>
-                          <p className="active-orders__type-code">Сделка № {item.id}</p>
-                        </div>
-                        <Link to="/profile" className="active-orders__user">{item.partner_name}</Link>
-                        <div className="active-orders__status">
-                          <p className="active-orders__status-price">{item.order_price} руб</p>
-                          <button onClick={this.authorFinishOrder} className="active-orders__status-apply site-btn site-btn_red site-btn_s2">Завершить</button>
-                        </div>
-                      </li>
-                    })} */}
-
-                  </ul>
-
+                <div className="profile__status-row">
+                  <span className="profile__status-name">Всего</span>
+                  <span className="profile__status-value">41</span>
                 </div>
               </div>
+            </div>
 
-              <div className="profile__username">
-                <p className="profile__username-title">Имя пользователя</p>
-                <div className="profile__username-group">
-                  <input readOnly defaultValue="user4040" type="text" className="profile__username-input" />
-                  <span className="profile__username-description">видно всем</span>
-                </div>
+            <div className="profile__status-item">
+              <p className="profile__status-title">Сделки ожидающие завершения:</p>
+              <div className="profile__status-info">
+                <button className="profile__status-row">
+                  <span className="profile__status-name">Вы исполнитель</span>
+                  <span className="profile__status-value">1</span>
+                </button>
+                <button className="profile__status-row">
+                  <span className="profile__status-name">Вы заказчик</span>
+                  <span className="profile__status-value">2</span>
+                </button>
               </div>
+            </div>
 
+            <div className="profile__status-item">
+              <p className="profile__status-title">Ваш депозит:</p>
+              <div className="profile__status-info">
+                <p className="profile__status-deposit">120000 руб</p>
+              </div>
+            </div>
 
+            <div className="profile__status-item">
+              <p className="profile__status-title">Ваш последний вход:</p>
+              <div className="profile__status-info">
+                <p className="profile__status-date">17 марта 2021 года</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div className="profile__username">
+            <p className="profile__username-title">Публикация услуги</p>
+            <form className="profile__form">
+              <input onChange={e => { onChange(e) }} name="title" type="text" placeholder="Название" className="profile__username-input" />
+              <input onChange={e => { onChange(e) }} name="description" type="text" placeholder="Описание" className="profile__username-input" />
+              <Select
+                options={categories}
+                name="Категории"
+                values={[]}
+                onChange={(value) => {
+                  setFormData({
+                    ...formData,
+                    category: value[0].value
+                  })
+                }}
+                placeholder="Категории"
+                value
+              />
+              <button onClick={handleSubmit} type="button" className="profile__btn-submit site-btn site-btn_red site-btn_s3">Опубликовать услугу</button>
+            </form>
+          </div>
+
+          <div className="profile__username">
+            <p className="profile__username-title">Имя пользователя</p>
+            <div className="profile__username-group">
+              <input readOnly defaultValue="user4040" type="text" className="profile__username-input" />
+              <span className="profile__username-description">видно всем</span>
             </div>
           </div>
+
         </div>
-      </React.Fragment>
-    );
-  }
+      </div>
+    </div>
+  );
 }

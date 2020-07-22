@@ -27,7 +27,7 @@ class MessageController {
       const dialogId = req.query.dialog;
       const userId = req.user._id;
 
-      this.updateReadStatus(res, userid, dialogId);
+      this.updateReadStatus(res, userId, dialogId);
 
       MessageModel.find({ dialog: dialogId })
         .populate(["dialog", "user", "attachments"])

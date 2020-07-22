@@ -1,0 +1,18 @@
+import nodemailer from 'nodemailer';
+
+const options = {
+  // host: process.env.NODEMAILER_HOST || "smtp.mailtrap.io",
+  service: "gmail",
+  // port: Number(process.env.NODEMAILER_PORT) || 2525,
+  port: 465,
+  auth: {
+    // user: process.env.NODEMAILER_USER,
+    // pass: process.env.NODEMAILER_PASS,
+    user: "kolotushins@gmail.com",
+    pass: "question12345Q?",
+  },
+};
+
+const transport = nodemailer.createTransport(options);
+
+export default transport;
