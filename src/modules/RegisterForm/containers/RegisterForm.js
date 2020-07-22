@@ -9,6 +9,7 @@ import { openNotification } from 'utils/helpers';
 
 import store from 'redux/store';
 
+
 export default withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({
@@ -22,6 +23,7 @@ export default withFormik({
     validateForm({ isAuth: false, values, errors });
     return errors;
   },
+  
   handleSubmit: (values, { setSubmitting, props }) => {
     store
       .dispatch(userActions.fetchUserRegister(values))
@@ -29,6 +31,7 @@ export default withFormik({
         props.history.push('/signup/verify');
         setSubmitting(false);
       })
+      
       .catch(err => {
         if (get(err, 'response.data.message.errmsg', '').indexOf('dup') >= 0) {
           openNotification({

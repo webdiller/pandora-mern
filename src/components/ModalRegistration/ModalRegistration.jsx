@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { Modal } from 'antd';
 import { RegisterForm } from "../../modules";
+import { LoginForm } from "../../modules";
 
 export default function ModalRegistration({activeRegistration}) {
 
     const [open, setOpen] = useState(activeRegistration);
-
-    const showModal = () => {
-        setOpen(true);
-    };
 
     const handleOk = e => {
         console.log(e);
@@ -27,8 +24,8 @@ export default function ModalRegistration({activeRegistration}) {
             onOk={handleOk}
             onCancel={handleCancel}
         >
-            {/* Авторизация */}
             <RegisterForm />
+            <LoginForm />
 
         </Modal>
     );
