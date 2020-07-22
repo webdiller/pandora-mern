@@ -25,6 +25,7 @@ mongoose
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
+      useFindAndModify: true,
     },
     (err, db) => {
       console.log(`Connected to MongoDB...`);
@@ -45,7 +46,7 @@ const MessageController = new MessageCtrl(io);
 const UploadFileController = new UploadFileCtrl();
 
 app.use(bodyParser.json());
-app.use(checkAuth);
+// app.use(checkAuth);
 app.use(updateLastSeen);
 
 // User Routes
@@ -66,9 +67,24 @@ app.post("/messages", MessageController.create);
 app.delete("/messages", MessageController.delete);
 
 // Service Routes
-const { CreateService } = require("./controllers/ServiceController");
+const {
+  CreateService,
+  listService,
+  listAllServiceCategories,
+  readService,
+  removeService,
+  updateService,
+  photoService,
+} = require("./controllers/ServiceController");
+const { requireLogin, adminMiddleware } = require("./middlewares/checkAuth");
 
 app.post("/service", CreateService);
+app.get("/service", listService);
+app.post("/service-categories", listAllServiceCategories);
+app.get("/service/:slug", readService);
+app.delete("/service/:slug", removeService);
+app.put("/service/:slug", adminMiddleware, updateService);
+app.get("/service/photo/:slug", photoService);
 
 // Category Routes
 const {
@@ -81,18 +97,10 @@ const {
 const { runValidation } = require("./utils/validations");
 const { categoryCreateValidator } = require("./utils/validations/category");
 
-const { requireLogin, adminMiddleware } = require("./middlewares/checkAuth");
-
-app.post(
-  "/category",
-  categoryCreateValidator,
-  runValidation,
-  adminMiddleware,
-  createCategory
-);
+app.post("/category", categoryCreateValidator, runValidation, createCategory);
 app.get("/categories", listCategory);
 app.get("/category/:slug", readCategory);
-app.delete("/category/:slug", adminMiddleware, removeCategory);
+app.delete("/category/:slug", removeCategory);
 
 // Upload Files Routes
 app.post("/files", multer.single("file"), UploadFileController.create);

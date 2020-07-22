@@ -8,7 +8,7 @@ exports.createCategory = (req, res) => {
 
   let categoryModel = CategoryModel({ name, slug });
 
-  categoryModel.save((err, date) => {
+  categoryModel.save((err, data) => {
     if (err) {
       return res.status(400).json({
         error: errorHandler(err),
@@ -31,7 +31,7 @@ exports.listCategory = (req, res) => {
   });
 };
 
-exports.readCategory = (rerq, res) => {
+exports.readCategory = (req, res) => {
   const slug = req.params.slug.toLowerCase();
 
   CategoryModel.findOne({ slug }).exec((err, category) => {

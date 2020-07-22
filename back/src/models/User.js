@@ -30,6 +30,9 @@ const UserSchema = new Schema(
       type: Date,
       default: new Date(),
     },
+    profile: {
+      type: String,
+    },
     role: {
       type: Number,
       default: 0,
