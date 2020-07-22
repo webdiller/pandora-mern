@@ -1,10 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Omnibox from '../Omnibox';
+import { connect } from "react-redux";
+import ModalRegistration from '../ModalRegistration/ModalRegistration';
+import ModalAuth from '../ModalAuth/ModalAuth';
 
 import './Header.sass';
 
-function Header() {
+function Header({ isAuth }) {
+
+    const [activeRegistration, setActiveRegistration] = React.useState(false);
 
     const Logo = () => {
         return (
@@ -38,29 +43,39 @@ function Header() {
         );
     };
 
+    const handleActiveChange = (e) => {
+        setActiveRegistration(!activeRegistration);
+    }
+
     const LinkToPersonal = () => {
-        let auth = 1;
-        return (
-            auth ?
+        if (isAuth) {
+            return (
                 <Link to="/profile" className="header__bar-icon">
                     <i className="header__bar-icon-inner far fa-user"></i>
                 </Link>
-                : <div className="header__bar-icon">
-                    <i className="header__bar-icon-inner far fa-user"></i>
-                </div>
-        )
+            )
+        } else {
+            return (
+                <React.Fragment>
+                    <div onClick={e => { handleActiveChange(e) }} className="header__bar-icon">
+                        <i className="header__bar-icon-inner far fa-user"></i>
+                    </div>
+                    <ModalRegistration activeRegistration={activeRegistration} />
+                    <ModalAuth />
+                </React.Fragment>
+            )
+        }
     };
 
     return (
         <header className="header">
-            
+
             <SvgPath />
             <Navigation />
 
             <div className="header__container">
                 <Logo />
                 <Omnibox />
-
                 <div className="header__bar">
                     <LinkToPersonal />
                 </div>
@@ -70,4 +85,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default connect(({ user }) => ({ isAuth: user.isAuth }))(Header);
