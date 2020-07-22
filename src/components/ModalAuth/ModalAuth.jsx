@@ -6,10 +6,6 @@ export default function ModalAuth() {
 
     const [open, setOpen] = useState(false);
 
-    const showModal = () => {
-        setOpen(true);
-    };
-
     const handleOk = e => {
         console.log(e);
         setOpen(false);
@@ -27,7 +23,6 @@ export default function ModalAuth() {
             onOk={handleOk}
             onCancel={handleCancel}
         >
-            {/* Авторизация */}
             <LoginForm />
 
         </Modal>
