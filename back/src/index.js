@@ -47,28 +47,28 @@ const MessageController = new MessageCtrl(io);
 const UploadFileController = new UploadFileCtrl();
 
 app.use(bodyParser.json());
-app.use(checkAuth);
+// app.use(checkAuth);
 app.use(updateLastSeen);
 if (process.env.NODE_ENV === 'development') {
     app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
 }
 
 // User Routes
-app.get("/user/me", UserController.getMe);
+app.get("/user/me", checkAuth, UserController.getMe);
 app.get("/user/verify", UserController.verify);
 app.post("/user/signup", registerValidation, UserController.create);
 app.post("/user/signin", loginValidation, UserController.login);
-app.get("/user/find", UserController.findUsers);
-app.get("/user/:id", UserController.show);
-app.delete("/user/:id", UserController.delete);
+app.get("/user/find", checkAuth, UserController.findUsers);
+app.get("/user/:id", checkAuth, UserController.show);
+app.delete("/user/:id", checkAuth, UserController.delete);
 
 // Message Routes
-app.get("/dialogs", DialogController.index);
-app.delete("/dialogs/:id", DialogController.delete);
-app.post("/dialogs", DialogController.create);
-app.get("/messages", MessageController.index);
-app.post("/messages", MessageController.create);
-app.delete("/messages", MessageController.delete);
+app.get("/dialogs", checkAuth, DialogController.index);
+app.delete("/dialogs/:id", checkAuth, DialogController.delete);
+app.post("/dialogs", checkAuth, DialogController.create);
+app.get("/messages", checkAuth, MessageController.index);
+app.post("/messages", checkAuth, MessageController.create);
+app.delete("/messages", checkAuth, MessageController.delete);
 
 // Service Routes
 const {
