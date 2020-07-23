@@ -47,7 +47,7 @@ const MessageController = new MessageCtrl(io);
 const UploadFileController = new UploadFileCtrl();
 
 app.use(bodyParser.json());
-app.use(checkAuth);
+// app.use(checkAuth);
 app.use(updateLastSeen);
 if (process.env.NODE_ENV === 'development') {
     app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
