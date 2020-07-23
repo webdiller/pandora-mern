@@ -8,12 +8,15 @@ import "./Dialogs.scss";
 
 const Dialogs = ({ items, userId, onSearch, inputValue, currentDialogId }) => (
   <div className="dialogs">
-    <div className="dialogs__search">
+    {/* <div className="dialogs__search">
       <Input.Search
         placeholder="Поиск среди контактов"
         onChange={e => onSearch(e.target.value)}
         value={inputValue}
       />
+    </div> */}
+    <div class="chat__search-wrapper">
+      <input value={inputValue} onChange={e => onSearch(e.target.value)} type="text" class="chat__search" />
     </div>
     {items.length ? (
       orderBy(items, ["created_at"], ["desc"]).map(item => (
@@ -26,11 +29,11 @@ const Dialogs = ({ items, userId, onSearch, inputValue, currentDialogId }) => (
         />
       ))
     ) : (
-      <Empty
-        image={Empty.PRESENTED_IMAGE_SIMPLE}
-        description="Ничего не найдено"
-      />
-    )}
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description="Ничего не найдено"
+        />
+      )}
   </div>
 );
 

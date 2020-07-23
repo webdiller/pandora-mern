@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Popover, Button, Icon } from 'antd';
+import { Icon } from 'antd';
 import { Emoji } from 'emoji-mart';
 import reactStringReplace from 'react-string-replace';
 
@@ -125,20 +125,6 @@ const Message = ({
       })}>
       <div className="message__content">
         <IconReaded isMe={isMe} isReaded={readed} />
-        <Popover
-          content={
-            <div>
-              <Button onClick={onRemoveMessage}>Удалить сообщение</Button>
-            </div>
-          }
-          trigger="click">
-          <div className="message__icon-actions">
-            <Button type="link" shape="circle" icon="ellipsis" />
-          </div>
-        </Popover>
-        <div className="message__avatar">
-          <Avatar user={user} />
-        </div>
         <div className="message__info">
           {(text || isTyping) && (
             <div className="message__bubble">
@@ -171,6 +157,7 @@ const Message = ({
               <Time date={date} />
             </span>
           )}
+          {/* <span class="chat__triangle"></span> */}
         </div>
       </div>
     </div>
