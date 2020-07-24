@@ -9,7 +9,7 @@ const options = {
     // user: process.env.NODEMAILER_USER,
     // pass: process.env.NODEMAILER_PASS,
     user: "kolotushins@gmail.com",
-    pass: "question12345Q?",
+    pass: "question!!!???!!!",
   },
 };
 
