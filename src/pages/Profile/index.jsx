@@ -12,11 +12,17 @@ export default function Profile() {
     category: '',
   });
 
+  const [services, setServices] = useState({
+    title: '',
+    description: '',
+  })
+
   const url = 'http://localhost:3003/service';
 
   const [categories, setCategories] = useState([])
 
   useEffect(() => {
+
     const getCategories = async () => {
       try {
         const result = await axios.get('http://localhost:3003/categories');
@@ -37,6 +43,26 @@ export default function Profile() {
       }
     }
 
+    const getServices = async () => {
+      try {
+        const result = await axios.get('http://localhost:3003/service');
+
+        let data = [];
+
+        result.data.map(item => {
+          data.push({
+            title: item.title,
+            description: item.excerpt,
+          })
+        });
+
+        setServices(data);
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     getCategories();
   }, [])
 
@@ -46,6 +72,37 @@ export default function Profile() {
       ...formData,
       [e.target.name]: e.target.value
     })
+  }
+
+  // Опубликовать сервис
+  const sendService = e => {
+    e.preventDefault();
+    axios.post(url,
+      {
+        title: formData.title,
+        body: formData.description,
+        categories: formData.category
+
+      },
+      {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('token')
+        }
+      }
+    )
+      .then(res => console.log(res))
+      .catch(err => {
+        if (err.response) {
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+        }
+        if (err.response.status === 404) {
+          console.log('some error');
+        }
+      })
   }
 
   return (
@@ -105,50 +162,22 @@ export default function Profile() {
             <form className="profile__form">
               <input onChange={e => { onChange(e) }} name="title" type="text" placeholder="Название" className="profile__username-input" />
               <input onChange={e => { onChange(e) }} name="description" type="text" placeholder="Описание" className="profile__username-input" />
-              <Select
-                options={categories}
-                name="Категории"
-                values={[]}
-                onChange={(value) => {
-                  setFormData({
-                    ...formData,
-                    category: value[0].value
-                  })
-                }}
-                placeholder="Категории"
-                value
-              />
-              <button onClick={e => {
-                e.preventDefault();
-
-                axios.post(url,
-                  {
-                    title: formData.title,
-                    body: formData.description,
-                    categories: formData.category
-
-                  },
-                  {
-                    headers: {
-                      Accept: 'application/json',
-                      'Content-Type': 'application/json',
-                      Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IiRfXyI6eyJzdHJpY3RNb2RlIjp0cnVlLCJzZWxlY3RlZCI6e30sImdldHRlcnMiOnt9LCJfaWQiOiI1ZjE4MzNlMGQxYzcyYjAwY2MxN2MxMzYiLCJ3YXNQb3B1bGF0ZWQiOmZhbHNlLCJhY3RpdmVQYXRocyI6eyJwYXRocyI6eyJwYXNzd29yZCI6ImluaXQiLCJmdWxsbmFtZSI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJjb25maXJtZWQiOiJpbml0IiwibGFzdF9zZWVuIjoiaW5pdCIsInJvbGUiOiJpbml0IiwiX2lkIjoiaW5pdCIsImNyZWF0ZWRBdCI6ImluaXQiLCJ1cGRhdGVkQXQiOiJpbml0IiwiY29uZmlybV9oYXNoIjoiaW5pdCIsIl9fdiI6ImluaXQifSwic3RhdGVzIjp7Imlnbm9yZSI6e30sImRlZmF1bHQiOnt9LCJpbml0Ijp7Il9pZCI6dHJ1ZSwiY29uZmlybWVkIjp0cnVlLCJsYXN0X3NlZW4iOnRydWUsInJvbGUiOnRydWUsImVtYWlsIjp0cnVlLCJmdWxsbmFtZSI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsImNyZWF0ZWRBdCI6dHJ1ZSwidXBkYXRlZEF0Ijp0cnVlLCJjb25maXJtX2hhc2giOnRydWUsIl9fdiI6dHJ1ZX0sIm1vZGlmeSI6e30sInJlcXVpcmUiOnt9fSwic3RhdGVOYW1lcyI6WyJyZXF1aXJlIiwibW9kaWZ5IiwiaW5pdCIsImRlZmF1bHQiLCJpZ25vcmUiXX0sInBhdGhzVG9TY29wZXMiOnt9LCJjYWNoZWRSZXF1aXJlZCI6e30sIiRzZXRDYWxsZWQiOnt9LCJlbWl0dGVyIjp7Il9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9LCIkb3B0aW9ucyI6eyJza2lwSWQiOnRydWUsImlzTmV3IjpmYWxzZSwid2lsbEluaXQiOnRydWV9fSwiaXNOZXciOmZhbHNlLCIkbG9jYWxzIjp7fSwiJG9wIjpudWxsLCJfZG9jIjp7ImNvbmZpcm1lZCI6dHJ1ZSwibGFzdF9zZWVuIjoiMjAyMC0wNy0yMlQxMTo1MTo1NC45NzVaIiwicm9sZSI6MCwiX2lkIjoiNWYxODMzZTBkMWM3MmIwMGNjMTdjMTM2IiwiZW1haWwiOiJldWdlbmVmcm9tcnVzQGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoicXdlcnR5IiwicGFzc3dvcmQiOiIkMmEkMTAkS0psSDdOQ0JCSDEyNlBTUTdpQU9IT2ZUbnR1UVZhZDM0akhUS25MdW85V0g4SWpWZTNPN0siLCJjcmVhdGVkQXQiOiIyMDIwLTA3LTIyVDEyOjQxOjA0LjA1OFoiLCJ1cGRhdGVkQXQiOiIyMDIwLTA3LTIyVDEyOjQxOjQ3LjI5M1oiLCJjb25maXJtX2hhc2giOiIkMmEkMTAkTHp6QnEzanVZRGNQQUZ0Y2J5ZmlzLjVHWTVkWTRiSWYuUm1ZdUticm13NTBkaE9WZG5rRkMiLCJfX3YiOjB9LCIkaW5pdCI6dHJ1ZX0sImlhdCI6MTU5NTQyMTcxMiwiZXhwIjoxNTk2MDI2NTEyfQ.Y-8u99ypzqeus9TpUH-nkJP_kh6W_U1GZH-NL0N4nP8`
-                    }
-                  }
-                )
-                  .then(res => console.log(res))
-                  .catch(err => {
-                    if (err.response) {
-                      console.log(err.response.data);
-                      console.log(err.response.status);
-                      console.log(err.response.headers);
-                    }
-                    if (err.response.status === 404) {
-                      console.log('some error');
-                    }
-                  })
-
-              }} type="submit" className="profile__btn-submit site-btn site-btn_red site-btn_s3">Опубликовать услугу</button>
+              <div className="profile__select-wrapper">
+                <Select
+                  options={categories}
+                  name="Категории"
+                  values={[]}
+                  onChange={(value) => {
+                    setFormData({
+                      ...formData,
+                      category: value[0].value
+                    })
+                  }}
+                  placeholder="Категории"
+                  value
+                />
+              </div>
+              <button onClick={sendService} type="submit" className="profile__btn-submit site-btn site-btn_red site-btn_s3">Опубликовать услугу</button>
             </form>
           </div>
 
@@ -157,6 +186,19 @@ export default function Profile() {
             <div className="profile__username-group">
               <input readOnly defaultValue="user4040" type="text" className="profile__username-input" />
               <span className="profile__username-description">видно всем</span>
+            </div>
+          </div>
+
+          <div className="profile__username">
+            <p className="profile__username-title">Опубликованные услуги</p>
+            <div className="profile__username-group profile__services">
+
+              <div className="profile__services-item">
+                <p className="profile__services-text">Сервис заголовок: </p>
+                <p className="profile__services-text">Сервис описание:</p>
+                <button type="submit" className="profile__btn-submit site-btn site-btn_red site-btn_s1">Удалить услугу</button>
+              </div>
+
             </div>
           </div>
 

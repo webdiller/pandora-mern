@@ -42,7 +42,6 @@ export default function Favorites() {
             <div className="favorites__container">
                 <Aside />
                 <div className="favorites__content">
-                    <TopNavigation />
 
                     <div className="favorites__body">
                         <p className="favorites__title"><i className="favorites__star far fa-star"></i> Избранное - 3</p>

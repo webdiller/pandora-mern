@@ -45,7 +45,6 @@ const Settings = () => {
             <div className="settings__container">
                 <Aside />
                 <div className="settings__content">
-                    <TopNavigation />
                     <div className="settings__body">
 
                         <div className="settings__title">Профиль</div>

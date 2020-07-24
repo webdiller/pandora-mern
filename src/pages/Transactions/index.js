@@ -1,5 +1,5 @@
 import React from 'react';
-import { Aside, TopNavigation } from '../../components';
+import { Aside } from '../../components';
 import './Transactions.sass';
 
 const Transactions = () => {
@@ -8,7 +8,7 @@ const Transactions = () => {
             <div className="transactions__container">
                 <Aside />
                 <div className="transactions__content">
-                    <TopNavigation />
+                    
                     <div className="transactions__body">
 
                         <p className="transactions__title">Транзакции</p>
