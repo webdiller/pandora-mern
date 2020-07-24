@@ -6,23 +6,31 @@ import './Profile.sass';
 
 export default function Profile() {
 
+  const url = 'http://localhost:3003/service';
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: '',
   });
 
-  const [services, setServices] = useState({
-    title: '',
-    description: '',
-  })
+  const [categories, setCategories] = useState([]);
 
-  const url = 'http://localhost:3003/service';
+  const [services, setServices] = useState([]);
 
-  const [categories, setCategories] = useState([])
+  const [load, setLoad] = useState(false);
+
+  const [error, setError] = useState('');
+
+  const getItem = (url) => {
+    return new Promise((resolve, reject) => {
+      axios.get(url).then(res => {
+        resolve(res.data);
+      }).catch(err => reject(err));
+    });
+  };
 
   useEffect(() => {
-
     const getCategories = async () => {
       try {
         const result = await axios.get('http://localhost:3003/categories');
@@ -63,6 +71,17 @@ export default function Profile() {
       }
     }
 
+    getItem('http://localhost:3003/service')
+      .then(res => {
+        setServices(res);
+        setLoad(true)
+      })
+      .catch(err => {
+        setError(err);
+        setLoad(true);
+      }
+      );
+
     getCategories();
   }, [])
 
@@ -92,7 +111,9 @@ export default function Profile() {
         }
       }
     )
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res);
+      })
       .catch(err => {
         if (err.response) {
           console.log(err.response.data);
@@ -177,7 +198,9 @@ export default function Profile() {
                   value
                 />
               </div>
-              <button onClick={sendService} type="submit" className="profile__btn-submit site-btn site-btn_red site-btn_s3">Опубликовать услугу</button>
+              <button onClick={
+                sendService
+              } type="button" className="profile__btn-submit site-btn site-btn_red site-btn_s3">Опубликовать услугу</button>
             </form>
           </div>
 
@@ -193,17 +216,30 @@ export default function Profile() {
             <p className="profile__username-title">Опубликованные услуги</p>
             <div className="profile__username-group profile__services">
 
-              <div className="profile__services-item">
-                <p className="profile__services-text">Сервис заголовок: </p>
-                <p className="profile__services-text">Сервис описание:</p>
-                <button type="submit" className="profile__btn-submit site-btn site-btn_red site-btn_s1">Удалить услугу</button>
-              </div>
 
+
+              {load ? (
+                <div>
+                  {error ? <div>Ошибка загрузки</div> : services.map((item) => (
+                    <div key={item._id} className="profile__services-item">
+                      <p className="profile__services-text">Заголовок: {item.title}</p>
+                      <p className="profile__services-text">Описание: {item.excerpt}</p>
+                      <button type="submit" className="profile__btn-submit site-btn site-btn_red site-btn_s1">Удалить услугу</button>
+                    </div>
+                  )
+                  )}
+                </div>)
+                : (
+                  <div>
+                    Загрузка...
+                  </div>
+                )
+              }
             </div>
           </div>
 
         </div>
-      </div>
+      </div >
     </div >
   );
 }
