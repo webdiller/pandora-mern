@@ -25,6 +25,9 @@
     font-size: 16px;
     letter-spacing: 0.1px;
     color: #adadad;
+    &:hover {
+      color: #000;
+    }
   }
 
   &__success-block {
@@ -62,5 +65,8 @@
 .verify-block {
   &__loading {
     text-align: center;
+  }
+  .anticon {
+    color: #da3030 !important;
   }
 }

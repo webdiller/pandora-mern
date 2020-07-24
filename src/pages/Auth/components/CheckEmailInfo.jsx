@@ -66,17 +66,20 @@ const CheckEmailInfo = ({ location, history }) => {
             extra={
               info.status === 'success' &&
               verified && (
-                <Button type="primary" onClick={() => history.push('/signin')}>
+                <button
+                  onClick={() => history.push('/signin')}
+                  type="primary"
+                  className="site-btn site-btn_red site-btn_s3 site-btn_w-100">
                   Войти
-                </Button>
+              </button>
               )
             }
           />
         ) : (
-          <div className="verify-block__loading">
-            <Spin size="large" />
-          </div>
-        )}
+            <div className="verify-block__loading">
+              <Spin size="large" />
+            </div>
+          )}
       </Block>
     </div>
   );

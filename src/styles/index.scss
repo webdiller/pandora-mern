@@ -93,6 +93,7 @@ html,
   font-size: 14px;
   padding: 11px 28px;
   white-space: nowrap;
+  cursor: pointer;
   &:hover {
     color: #fff;
   }
@@ -128,6 +129,9 @@ html,
     background-color: #fc171e;
     color: #fff;
     transition: all 0.3s ease;
+  }
+  &_w-100 {
+    width: 100%;
   }
 }
 

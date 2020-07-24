@@ -15,8 +15,8 @@ const Dialogs = ({ items, userId, onSearch, inputValue, currentDialogId }) => (
         value={inputValue}
       />
     </div> */}
-    <div class="chat__search-wrapper">
-      <input value={inputValue} onChange={e => onSearch(e.target.value)} type="text" class="chat__search" />
+    <div className="chat__search-wrapper">
+      <input value={inputValue} onChange={e => onSearch(e.target.value)} type="text" className="chat__search" />
     </div>
     {items.length ? (
       orderBy(items, ["created_at"], ["desc"]).map(item => (

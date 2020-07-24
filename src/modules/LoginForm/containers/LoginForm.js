@@ -25,7 +25,7 @@ const LoginFormContainer = withFormik({
       .dispatch(userActions.fetchUserLogin(values))
       .then(({ status }) => {
         if (status === 'success') {
-          props.history.push('/');
+          props.history.push('/profile');
         }
         setSubmitting(false);
       })

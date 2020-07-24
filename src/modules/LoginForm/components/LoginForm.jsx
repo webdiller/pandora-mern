@@ -57,14 +57,13 @@ const LoginForm = props => {
           </Form.Item>
           <Form.Item>
             {isSubmitting && !isValid && <span>Ошибка!</span>}
-            <Button
-              disabled={isSubmitting}
-              onClick={handleSubmit}
-              type="primary"
-              size="large"
-            >
-              Войти в аккаунт
-            </Button>
+            <button
+                disabled={isSubmitting}
+                onClick={handleSubmit}
+                type="submit"
+                className="site-btn site-btn_red site-btn_s3 site-btn_w-100">
+                Войти в аккаунт
+              </button>
           </Form.Item>
           <Link className="auth__register-link" to="/signup">
             Зарегистрироваться
